@@ -1,23 +1,50 @@
-import React from "react";
-import { TextInput, View, StyleSheet } from "react-native";
-import PrimaryButton from "../components/PrimaryButton";
+import React, { useState } from "react";
+import { TextInput, View, StyleSheet, Alert } from "react-native";
+import PrimaryButton from "../components/UI/PrimaryButton";
+import colors from "../constants/colors";
 
-const StartGameScreen = () => {
+const StartGameScreen = ({ onPickNumber }) => {
+  const [inputValue, setInputValue] = useState("");
+
+  const inputHandler = (enteredText) => {
+    setInputValue(enteredText);
+  };
+
+  const confirmInputHandler = () => {
+    const chosenNumber = parseInt(inputValue);
+    if (isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99) {
+      Alert.alert(
+        "Invalid Number",
+        "Number has to be a number between 0 and 99",
+        [{ text: "Okay", style: "destructive", onPress: resetInputHandler }]
+      );
+      return;
+    }
+
+    onPickNumber(chosenNumber);
+  };
+
+  const resetInputHandler = () => {
+    setInputValue("");
+  };
+
   return (
     <View style={styles.inputContainer}>
       <TextInput
         keyboardType='number-pad'
         autoCapitalize='none'
         autoCorrect={false}
+        value={inputValue}
         style={styles.numberInput}
         maxLength={2}
+        onChangeText={inputHandler}
       />
       <View style={styles.buttonContainer}>
         <View style={styles.button}>
-          <PrimaryButton>Reset</PrimaryButton>
+          <PrimaryButton onPress={resetInputHandler}>Reset</PrimaryButton>
         </View>
         <View style={styles.button}>
-          <PrimaryButton>Confirm</PrimaryButton>
+          <PrimaryButton onPress={confirmInputHandler}>Confirm</PrimaryButton>
         </View>
       </View>
     </View>
@@ -32,7 +59,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 24,
     borderRadius: 8,
     padding: 16,
-    backgroundColor: "#3b021f",
+    backgroundColor: colors.primary800,
     alignItems: "center",
     justifyContent: "center",
 
@@ -52,9 +79,9 @@ const styles = StyleSheet.create({
     height: 50,
     width: 80,
     fontSize: 32,
-    borderBottomColor: "#ddb52f",
+    borderBottomColor: colors.accent500,
     borderBottomWidth: 2,
-    color: "#ddb52f",
+    color: colors.accent500,
     marginVertical: 8,
     paddingHorizontal: 16,
     textAlign: "center",
