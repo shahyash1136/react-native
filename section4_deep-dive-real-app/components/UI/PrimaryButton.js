@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     textAlign: "center",
+    fontFamily: "open-sans-bold",
   },
 
   pressed: {
